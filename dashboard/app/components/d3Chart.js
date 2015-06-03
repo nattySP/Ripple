@@ -19,11 +19,10 @@ d3Chart.create = function(el, props, state) {
 
     var zoom = d3.behavior.zoom()
         .scale(projection.scale())
-        .scaleExtent([1, 10])
+        .scaleExtent([1, 500])
         .on("zoom", zoomed);            
 
     svg.call(zoom)
-       .on('dblclick.zoom', null);            
 
     var states = svg.append('g')
                     .attr('id', 'states');
@@ -37,7 +36,7 @@ d3Chart.create = function(el, props, state) {
        .attr('stroke-width', .5)
        .attr('fill', '#132A50');
 
-  var events = d3.select(el).select('svg').append('g')
+  var events = d3.select('#states').append('g')
       .attr('id', 'events');
 
 /////////////
@@ -68,7 +67,10 @@ d3Chart.destroy = function(el) {
 d3Chart._drawPoints = function(el, data) {
   console.log('_drawPoints: ', data.data);
   var dataObj = data.data; 
+  var projection = d3.geo.albersUsa();
   var path = d3.geo.path()
+               .projection(projection)
+               .pointRadius(.1);
 
   //draw the circles    
   circles = d3.select(el).select('svg').select('#events').selectAll('path')
